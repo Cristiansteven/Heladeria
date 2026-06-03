@@ -17,6 +17,29 @@ const formularioInicial = {
   sabor: '',
 }
 
+const camposTexto = [
+  { id: 'nombre', label: 'Nombre' },
+  { id: 'tipo', label: 'Tipo' },
+  { id: 'sabor', label: 'Sabor' },
+]
+
+const camposNumero = [
+  { id: 'precio', label: 'Precio' },
+  { id: 'calorias', label: 'Calorias' },
+  { id: 'inventario', label: 'Inventario' },
+]
+
+const camposCheckbox = [
+  { id: 'es_vegetariano', label: 'Vegetariano' },
+  { id: 'es_sano', label: 'Sano' },
+]
+
+const formatoMoneda = new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+  minimumFractionDigits: 0,
+})
+
 function Ingredientes() {
   const [ingredientes, setIngredientes] = useState([])
   const [formulario, setFormulario] = useState(formularioInicial)
@@ -25,33 +48,28 @@ function Ingredientes() {
   const [loading, setLoading] = useState(true)
   const [guardando, setGuardando] = useState(false)
 
-  async function cargarIngredientes() {
-    setLoading(true)
-    setError('')
-
-    const { data, error: queryError } = await consultarIngredientes()
-
+  function guardarConsulta(data, queryError) {
     if (queryError) {
       setError(queryError.message)
       setIngredientes([])
     } else {
       setIngredientes(data || [])
     }
+  }
 
+  async function cargarIngredientes() {
+    setLoading(true)
+    setError('')
+
+    const { data, error: queryError } = await consultarIngredientes()
+    guardarConsulta(data, queryError)
     setLoading(false)
   }
 
   useEffect(() => {
     async function cargarIngredientesIniciales() {
       const { data, error: queryError } = await consultarIngredientes()
-
-      if (queryError) {
-        setError(queryError.message)
-        setIngredientes([])
-      } else {
-        setIngredientes(data || [])
-      }
-
+      guardarConsulta(data, queryError)
       setLoading(false)
     }
 
@@ -61,10 +79,10 @@ function Ingredientes() {
   function cambiarCampo(event) {
     const { checked, name, type, value } = event.target
 
-    setFormulario({
-      ...formulario,
+    setFormulario((formularioActual) => ({
+      ...formularioActual,
       [name]: type === 'checkbox' ? checked : value,
-    })
+    }))
   }
 
   function limpiarFormulario() {
@@ -152,127 +170,57 @@ function Ingredientes() {
         </div>
 
         <form className="row g-3 mb-4" onSubmit={guardarIngrediente}>
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="nombre">
-              Nombre
-            </label>
-            <input
-              className="form-control"
-              id="nombre"
-              name="nombre"
-              value={formulario.nombre}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="tipo">
-              Tipo
-            </label>
-            <input
-              className="form-control"
-              id="tipo"
-              name="tipo"
-              value={formulario.tipo}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="sabor">
-              Sabor
-            </label>
-            <input
-              className="form-control"
-              id="sabor"
-              name="sabor"
-              value={formulario.sabor}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="precio">
-              Precio
-            </label>
-            <input
-              className="form-control"
-              id="precio"
-              min="0"
-              name="precio"
-              type="number"
-              value={formulario.precio}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="calorias">
-              Calorias
-            </label>
-            <input
-              className="form-control"
-              id="calorias"
-              min="0"
-              name="calorias"
-              type="number"
-              value={formulario.calorias}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="inventario">
-              Inventario
-            </label>
-            <input
-              className="form-control"
-              id="inventario"
-              min="0"
-              name="inventario"
-              type="number"
-              value={formulario.inventario}
-              onChange={cambiarCampo}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <div className="form-check">
-              <input
-                checked={formulario.es_vegetariano}
-                className="form-check-input"
-                id="es_vegetariano"
-                name="es_vegetariano"
-                type="checkbox"
-                onChange={cambiarCampo}
-              />
-              <label className="form-check-label" htmlFor="es_vegetariano">
-                Vegetariano
+          {camposTexto.map((campo) => (
+            <div className="col-md-4" key={campo.id}>
+              <label className="form-label" htmlFor={campo.id}>
+                {campo.label}
               </label>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="form-check">
               <input
-                checked={formulario.es_sano}
-                className="form-check-input"
-                id="es_sano"
-                name="es_sano"
-                type="checkbox"
+                className="form-control"
+                id={campo.id}
+                name={campo.id}
+                value={formulario[campo.id]}
                 onChange={cambiarCampo}
+                required
               />
-              <label className="form-check-label" htmlFor="es_sano">
-                Sano
-              </label>
             </div>
-          </div>
+          ))}
+
+          {camposNumero.map((campo) => (
+            <div className="col-md-4" key={campo.id}>
+              <label className="form-label" htmlFor={campo.id}>
+                {campo.label}
+              </label>
+              <input
+                className="form-control"
+                id={campo.id}
+                min="0"
+                name={campo.id}
+                type="number"
+                value={formulario[campo.id]}
+                onChange={cambiarCampo}
+                required
+              />
+            </div>
+          ))}
+
+          {camposCheckbox.map((campo) => (
+            <div className="col-md-4" key={campo.id}>
+              <div className="form-check">
+                <input
+                  checked={formulario[campo.id]}
+                  className="form-check-input"
+                  id={campo.id}
+                  name={campo.id}
+                  type="checkbox"
+                  onChange={cambiarCampo}
+                />
+                <label className="form-check-label" htmlFor={campo.id}>
+                  {campo.label}
+                </label>
+              </div>
+            </div>
+          ))}
 
           <div className="col-12 d-flex gap-2">
             <button className="btn btn-primary" type="submit" disabled={guardando}>
@@ -312,7 +260,7 @@ function Ingredientes() {
                   <td>{ingrediente.nombre}</td>
                   <td>{ingrediente.tipo}</td>
                   <td>{ingrediente.sabor}</td>
-                  <td>{ingrediente.precio}</td>
+                  <td>{formatoMoneda.format(ingrediente.precio || 0)}</td>
                   <td>{ingrediente.calorias}</td>
                   <td>{ingrediente.inventario}</td>
                   <td>{ingrediente.es_vegetariano ? 'Si' : 'No'}</td>

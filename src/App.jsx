@@ -5,14 +5,18 @@ import Home from './components/Home.jsx'
 import Ingredientes from './components/Ingredientes.jsx'
 import Productos from './components/Productos.jsx'
 import Login from './components/Login.jsx'
+import VentasDia from './components/VentasDia.jsx'
+import Rentabilidad from './components/Rentabilidad.jsx'
 import {
   cerrarSesionActual,
   consultarPerfilUsuario,
   consultarSesionActual,
 } from './services/authService.js'
 
-function AuthGuard({ perfil, user, children }) {
-  if (!user || perfil?.rol === 'cliente') {
+function AuthGuard({ allowedRoles, perfil, user, children }) {
+  const rol = perfil?.rol?.toLowerCase()
+
+  if (!user || !allowedRoles.includes(rol)) {
     return <Navigate to="/productos" replace />
   }
 
@@ -76,12 +80,40 @@ export default function App() {
           <Route
             path="/ingredientes"
             element={
-              <AuthGuard perfil={perfil} user={user}>
+              <AuthGuard
+                allowedRoles={['empleado', 'administrador', 'admin']}
+                perfil={perfil}
+                user={user}
+              >
                 <Ingredientes />
               </AuthGuard>
             }
           />
-          <Route path="/productos" element={<Productos />} />
+          <Route path="/productos" element={<Productos perfil={perfil} user={user} />} />
+          <Route
+            path="/ventas-dia"
+            element={
+              <AuthGuard
+                allowedRoles={['cliente', 'administrador', 'admin']}
+                perfil={perfil}
+                user={user}
+              >
+                <VentasDia />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/rentabilidad"
+            element={
+              <AuthGuard
+                allowedRoles={['administrador', 'admin']}
+                perfil={perfil}
+                user={user}
+              >
+                <Rentabilidad />
+              </AuthGuard>
+            }
+          />
           <Route path="/login" element={<Login onAuthChange={cargarSesion} />} />
         </Routes>
       </main>

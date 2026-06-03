@@ -9,7 +9,7 @@ function Home() {
             <p className="text-primary fw-semibold mb-2">Heladeria artesanal</p>
             <h1 className="display-4 fw-bold mb-3">Nube & Nieve</h1>
             <p className="lead text-secondary mb-4">
-              Sabores frescos, productos claros y una gestion sencilla para atender mejor.
+              Sabores frescos, productos claros y una gestion sencilla para atender mejor
             </p>
 
             <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center justify-content-md-start">
@@ -36,19 +36,19 @@ function Home() {
           <div className="col-md-4">
             <div className="feature-card">
               <strong>Productos visibles</strong>
-              <span>Catalogo simple para clientes y equipo.</span>
+              <span>Catalogo simple para clientes y equipo</span>
             </div>
           </div>
           <div className="col-md-4">
             <div className="feature-card">
               <strong>Ingredientes al dia</strong>
-              <span>Control de inventario, precios y calorias.</span>
+              <span>Control de inventario, precios y calorias</span>
             </div>
           </div>
           <div className="col-md-4">
             <div className="feature-card">
               <strong>Roles claros</strong>
-              <span>Acceso segun usuario autenticado.</span>
+              <span>Acceso segun usuario autenticado</span>
             </div>
           </div>
         </div>

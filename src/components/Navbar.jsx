@@ -3,16 +3,20 @@ import { NavLink } from 'react-router-dom'
 function Navbar({ onLogout, perfil, user }) {
   const getLinkClass = ({ isActive }) =>
     isActive ? 'btn btn-light btn-sm' : 'btn btn-outline-light btn-sm'
-  const puedeVerIngredientes = user && perfil?.rol !== 'cliente'
+  const rol = perfil?.rol?.toLowerCase()
+  const puedeVerIngredientes = user && ['empleado', 'administrador', 'admin'].includes(rol)
+  const puedeVerVentasDia = user && ['cliente', 'administrador', 'admin'].includes(rol)
+  const puedeVerRentabilidad = user && ['administrador', 'admin'].includes(rol)
+  const textoPerfil = perfil?.rol
 
   return (
     <nav className="navbar navbar-dark bg-primary shadow-sm">
       <div className="container">
         <span className="navbar-brand mb-0 h1">Heladeria</span>
 
-        <div className="d-flex gap-2">
+        <div className="navbar-actions d-flex gap-2">
           <span className="text-white-50 small d-flex align-items-center">
-            {perfil?.nombre} - {perfil?.rol}
+            {textoPerfil}
           </span>
           <NavLink className={getLinkClass} to="/">
             Inicio
@@ -25,6 +29,16 @@ function Navbar({ onLogout, perfil, user }) {
           <NavLink className={getLinkClass} to="/productos">
             Productos
           </NavLink>
+          {puedeVerVentasDia && (
+            <NavLink className={getLinkClass} to="/ventas-dia">
+              Ventas del dia
+            </NavLink>
+          )}
+          {puedeVerRentabilidad && (
+            <NavLink className={getLinkClass} to="/rentabilidad">
+              Rentabilidad
+            </NavLink>
+          )}
           {user ? (
             <button className="btn btn-outline-light btn-sm" type="button" onClick={onLogout}>
               Cerrar sesion
