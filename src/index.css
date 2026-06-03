@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  background: #f8f9fa;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.home-hero {
+  background:
+    radial-gradient(circle at top right, rgba(13, 110, 253, 0.16), transparent 34%),
+    linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.ice-logo {
+  position: relative;
+  width: 240px;
+  height: 260px;
+}
+
+.ice-scoop {
+  position: absolute;
+  border-radius: 999px;
+  box-shadow: 0 14px 35px rgba(13, 110, 253, 0.18);
+}
+
+.scoop-one {
+  width: 116px;
+  height: 116px;
+  left: 58px;
+  top: 12px;
+  background: #e7f1ff;
+}
+
+.scoop-two {
+  width: 102px;
+  height: 102px;
+  left: 24px;
+  top: 82px;
+  background: #f8d7da;
+}
+
+.scoop-three {
+  width: 102px;
+  height: 102px;
+  right: 24px;
+  top: 82px;
+  background: #d1e7dd;
+}
+
+.ice-cone {
+  position: absolute;
+  left: 72px;
+  top: 152px;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-top: 110px solid #d6a45f;
+}
+
+.feature-card {
+  height: 100%;
+  padding: 18px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.feature-card strong,
+.feature-card span {
+  display: block;
+}
+
+.feature-card span {
+  margin-top: 4px;
+  color: #6c757d;
+}
